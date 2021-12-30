@@ -1,18 +1,23 @@
 import React from 'react';
 import {View} from 'react-native';
 
-export const Background = () => {
+interface Props {
+  deviceWidth: number;
+  deviceHeight: number;
+}
+
+export const Background = ({deviceWidth, deviceHeight}: Props) => {
   return (
     <View
       style={{
         position: 'absolute',
         backgroundColor: '#5856D6',
-        top: -400,
-        width: 1000,
-        height: 1200,
+        top: -95,
+        width: deviceWidth + 200,
+        height: deviceHeight + 200,
         transform: [
           {
-            rotate: '-70deg',
+            rotate: '-30deg',
           },
         ],
       }}

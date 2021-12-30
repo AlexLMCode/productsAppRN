@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Background} from '../components/Background';
 import {WhiteLogo} from '../components/WhiteLogo';
 import {
+  Alert,
+  Dimensions,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -13,10 +15,13 @@ import {
 import {loginStyles} from '../theme/loginTheme';
 import {useForm} from '../hooks/useForm';
 import {StackScreenProps} from '@react-navigation/stack';
+import {AuthContext} from '../context/AuthContext';
 
 interface Props extends StackScreenProps<any, any> {}
 
 const LoginScreen = ({navigation}: Props) => {
+  const {signIn, errorMessage, removeError} = useContext(AuthContext);
+
   const {email, password, form, onChange} = useForm({
     email: '',
     password: '',
@@ -25,12 +30,25 @@ const LoginScreen = ({navigation}: Props) => {
   const onLogin = () => {
     console.log(form);
     Keyboard.dismiss();
+    signIn({correo: email, password: password});
   };
+
+  useEffect(() => {
+    if (errorMessage.length === 0) {
+      return;
+    }
+    Alert.alert('Login incorrecto', errorMessage, [
+      {text: 'Ok', onPress: removeError},
+    ]);
+  }, [errorMessage, removeError]);
 
   return (
     <>
       {/*  Background  */}
-      <Background />
+      <Background
+        deviceHeight={Dimensions.get('window').height}
+        deviceWidth={Dimensions.get('window').width}
+      />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
