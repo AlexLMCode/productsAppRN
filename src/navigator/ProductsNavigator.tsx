@@ -16,6 +16,7 @@ export const ProductsNavigator = () => {
       screenOptions={{
         cardStyle: {
           borderColor: 'white',
+          backgroundColor: 'white',
         },
         headerStyle: {
           elevation: 0,
