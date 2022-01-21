@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {StackScreenProps} from '@react-navigation/stack';
 import {ProductsStackParams} from '../navigator/ProductsNavigator';
 import useCategories from '../hooks/useCategories';
@@ -20,8 +21,13 @@ interface Props
 
 const ProductScreen = ({route, navigation}: Props) => {
   const {id = '', name = ''} = route.params;
-  const {loadProductById, addProduct, updateProduct, deleteProduct} =
-    useContext(ProductsContext);
+  const {
+    loadProductById,
+    addProduct,
+    updateProduct,
+    deleteProduct,
+    uploadImage,
+  } = useContext(ProductsContext);
 
   const {categories} = useCategories();
   const {_id, categoriaId, nombre, img, onChange, setFormValue} = useForm({
@@ -30,6 +36,8 @@ const ProductScreen = ({route, navigation}: Props) => {
     nombre: name,
     img: '',
   });
+
+  const [tempUri, setTempUri] = useState<string>();
 
   useEffect(() => {
     //this is the setoptions from the stackscreen root
@@ -77,6 +85,46 @@ const ProductScreen = ({route, navigation}: Props) => {
     console.log(deletedProduct);
     navigation.replace('ProductsScreen');
   };
+
+  const takePhoto = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        quality: 0.5,
+      },
+      resp => {
+        if (resp.didCancel) {
+          return;
+        }
+        if (!resp.assets) {
+          return;
+        } else {
+          setTempUri(resp.assets[0].uri);
+          uploadImage(resp, _id);
+        }
+      },
+    );
+  };
+
+  const takePhotoFromGallery = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        quality: 0.5,
+      },
+      resp => {
+        if (resp.didCancel) {
+          return;
+        }
+        if (!resp.assets) {
+          return;
+        } else {
+          setTempUri(resp.assets[0].uri);
+          uploadImage(resp, _id);
+        }
+      },
+    );
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -106,20 +154,30 @@ const ProductScreen = ({route, navigation}: Props) => {
               justifyContent: 'space-around',
               marginTop: 10,
             }}>
-            <Button title="Camera" onPress={() => {}} color="#5856d6" />
-            <Button title="Gallery" onPress={() => {}} color="#5856d6" />
+            <Button title="Camera" onPress={takePhoto} color="#5856d6" />
+            <Button
+              title="Gallery"
+              onPress={takePhotoFromGallery}
+              color="#5856d6"
+            />
             <Button title="Delete" onPress={deleteSelectedProd} color="red" />
           </View>
         )}
         {/* Save and gallery buttons */}
 
-        {img.length > 0 && (
+        {img.length > 0 && !tempUri && (
           <Image
             source={{uri: img}}
             style={{width: '100%', height: 300, marginTop: 20}}
           />
         )}
         {/* TODO: PLACE TEMPORAL IMAGE */}
+        {tempUri && (
+          <Image
+            source={{uri: tempUri}}
+            style={{width: '100%', height: 300, marginTop: 20}}
+          />
+        )}
       </ScrollView>
     </View>
   );
