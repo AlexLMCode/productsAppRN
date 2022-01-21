@@ -1,4 +1,5 @@
-package com.productosapp;
+// package com.productosapp;
+package com.alejandrolujan.productosreactnative;
 
 import android.app.Application;
 import android.content.Context;

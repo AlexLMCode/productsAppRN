@@ -1,4 +1,5 @@
-package com.productosapp;
+// package com.productosapp;
+package com.alejandrolujan.productosreactnative;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;
