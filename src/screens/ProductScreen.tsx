@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,19 +8,19 @@ import {
   Button,
   Image,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {StackScreenProps} from '@react-navigation/stack';
-import {ProductsStackParams} from '../navigator/ProductsNavigator';
+import { Picker } from '@react-native-picker/picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { StackScreenProps } from '@react-navigation/stack';
+import { ProductsStackParams } from '../navigator/ProductsNavigator';
 import useCategories from '../hooks/useCategories';
-import {useForm} from '../hooks/useForm';
-import {ProductsContext} from '../context/ProductsContext';
+import { useForm } from '../hooks/useForm';
+import { ProductsContext } from '../context/ProductsContext';
 
 interface Props
-  extends StackScreenProps<ProductsStackParams, 'ProductScreen'> {}
+  extends StackScreenProps<ProductsStackParams, 'ProductScreen'> { }
 
-const ProductScreen = ({route, navigation}: Props) => {
-  const {id = '', name = ''} = route.params;
+const ProductScreen = ({ route, navigation }: Props) => {
+  const { id = '', name = '' } = route.params;
   const {
     loadProductById,
     addProduct,
@@ -29,8 +29,8 @@ const ProductScreen = ({route, navigation}: Props) => {
     uploadImage,
   } = useContext(ProductsContext);
 
-  const {categories} = useCategories();
-  const {_id, categoriaId, nombre, img, onChange, setFormValue} = useForm({
+  const { categories } = useCategories();
+  const { _id, categoriaId, nombre, img, onChange, setFormValue } = useForm({
     _id: id,
     categoriaId: '',
     nombre: name,
@@ -128,7 +128,7 @@ const ProductScreen = ({route, navigation}: Props) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Text style={styles.label}>Nombre del producto:</Text>
+        <Text style={styles.label}>Product Name:</Text>
         <TextInput
           placeholder="Product name"
           style={styles.textInput}
@@ -167,15 +167,15 @@ const ProductScreen = ({route, navigation}: Props) => {
 
         {img.length > 0 && !tempUri && (
           <Image
-            source={{uri: img}}
-            style={{width: '100%', height: 300, marginTop: 20}}
+            source={{ uri: img }}
+            style={{ width: '100%', height: 300, marginTop: 20 }}
           />
         )}
         {/* TODO: PLACE TEMPORAL IMAGE */}
         {tempUri && (
           <Image
-            source={{uri: tempUri}}
-            style={{width: '100%', height: 300, marginTop: 20}}
+            source={{ uri: tempUri }}
+            style={{ width: '100%', height: 300, marginTop: 20 }}
           />
         )}
       </ScrollView>
